@@ -2,7 +2,7 @@ import math
 import socket
 import sys
 
-sys.path.append('../')
+sys.path.append('./')
 import header_utils
 
 
@@ -11,7 +11,7 @@ BUFFER_SIZE = 1024
 PORT = 5050
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
-SERVER = "192.168.1.15"
+SERVER = "192.168.0.1"
 ADDR = (SERVER, PORT)
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

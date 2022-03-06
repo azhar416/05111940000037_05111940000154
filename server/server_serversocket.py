@@ -5,7 +5,7 @@ import sys
 import threading
 from os import walk
 
-sys.path.append('../')
+sys.path.append('./')
 import header_utils
 
 # Constants

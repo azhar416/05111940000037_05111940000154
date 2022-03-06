@@ -3,7 +3,7 @@ import sys
 import os
 import math
 
-sys.path.append('../')
+sys.path.append('./')
 import header_utils
 
 HEADER_SIZE = 256

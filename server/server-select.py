@@ -3,7 +3,7 @@ import select
 import sys
 import os
 
-sys.path.append('../')
+sys.path.append('./')
 import header_utils
 
 BUFFER_SIZE = 1024
