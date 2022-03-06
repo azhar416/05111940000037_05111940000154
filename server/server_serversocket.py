@@ -5,7 +5,7 @@ import sys
 import threading
 from os import walk
 
-sys.path.append('./')
+sys.path.append('../')
 import header_utils
 
 # Constants
@@ -23,7 +23,7 @@ server.bind(ADDR)
 
 files = []
 
-def listFiles(conn):
+def listFiles():
     files = next(walk(DATASET), (None, None, []))[2]
     message = "List of files :\n"
     for idx, f in enumerate(files):
@@ -74,7 +74,7 @@ def send_file(conn, addr, file):
 
 def handle_client(conn, addr):
     print(f"[NEW CONNECTION] {addr} connected.")
-    send(conn, addr, f"{listFiles(conn)}Select file you want to download with command 'unduh nama_file'")
+    send(conn, addr, f"{listFiles()}Select file you want to download with command 'unduh nama_file'")
     connected = True
     while connected:
         res = recv(conn, addr)
