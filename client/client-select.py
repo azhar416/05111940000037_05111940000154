@@ -3,7 +3,7 @@ import sys
 import os
 import math
 
-sys.path.append('./')
+sys.path.append('../')
 import header_utils
 
 HEADER_SIZE = 256
@@ -50,16 +50,16 @@ def recv_file(header):
 try:
     while True:
         # msg from server
+        print(">>", end=' ', flush=True)
+        message = sys.stdin.readline()
+        send_msg(message)
+
         header = recv_header()
         header_type = header_utils.read_header_type(header)
         if header_type == 'msg':
             recv_msg(header)
         elif header_type == 'file':
             recv_file(header)
-
-        print(">>", end=' ', flush=True)
-        message = sys.stdin.readline()
-        send_msg(message)
 
 except KeyboardInterrupt:
     client_socket.close()

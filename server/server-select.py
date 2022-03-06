@@ -3,7 +3,7 @@ import select
 import sys
 import os
 
-sys.path.append('./')
+sys.path.append('../')
 import header_utils
 
 BUFFER_SIZE = 1024
@@ -18,7 +18,7 @@ server_socket.listen(5)
 
 input_socket = [server_socket]
 
-dataset = './dataset/'
+dataset = './dataset'
 files = []
 def dataset_list_file():
     files = next(os.walk(dataset), (None, None, []))[2]
@@ -44,15 +44,19 @@ def recv_msg(sock):
     return 0
 
 def send_file(sock, file_name):
-    file_path = dataset + file_name
+    file_path = f"{dataset}/{file_name}"
     if os.path.isfile(file_path):
+        file_size = os.path.getsize(file_path)
+        header = header_utils.build_file_header(file_name, file_size)
+        print(f'[SENDING] Server is sending file {file_name}')
+        sock.send(header)
         with open(file_path, 'rb') as f:
             while True:
                 bytes_read = f.read(BUFFER_SIZE)
                 if not bytes_read:
                     print(f'[SUCCESS] Server successfully send file { file_name }')
                     break
-                socket.sendall(bytes_read)
+                sock.sendall(bytes_read)
         f.close()
     else:
         print(f'[ERROR] Server failed to send file { file_name }')
@@ -60,20 +64,20 @@ def send_file(sock, file_name):
 try:
     while True:
         read_ready, write_ready, exception = select.select(input_socket, [], [])
-        
+
         for sock in read_ready:
             if sock == server_socket:
                 client_socket, client_address = server_socket.accept()
                 input_socket.append(client_socket)        
-            
             else:
-                send_msg(sock, f"{dataset_list_file()}Select file you want to download with command 'unduh nama_file'")
                 received_message = recv_msg(sock)
                 if received_message:
                     command = received_message.split(" ")
                     if command[0] == "unduh":
-                        file_name = command[1]
+                        file_name = command[1].strip("\n")
                         send_file(sock, file_name)
+                    elif command[0].strip('\n') == "list":
+                        send_msg(sock, f"{dataset_list_file()}Select file you want to download with command 'unduh nama_file'")
                     else:
                         send_msg(sock, "Invalid command, please try again")
                 else:
