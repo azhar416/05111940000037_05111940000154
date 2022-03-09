@@ -10,7 +10,8 @@ BUFFER_SIZE = 1024
 HEADER_SIZE = 256
 FORMAT = 'utf-8'
 
-server_address = ('127.0.0.1', 5000)
+
+server_address = ('192.168.1.21', 5000)
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 server_socket.bind(server_address)
@@ -64,11 +65,11 @@ def send_file(sock, file_name):
 try:
     while True:
         read_ready, write_ready, exception = select.select(input_socket, [], [])
-
+        print("ok")
         for sock in read_ready:
             if sock == server_socket:
                 client_socket, client_address = server_socket.accept()
-                input_socket.append(client_socket)        
+                input_socket.append(client_socket)      
             else:
                 received_message = recv_msg(sock)
                 if received_message:
