@@ -1,6 +1,7 @@
-from email import header
 import os
+from pickle import TRUE
 import socket
+import socketserver
 import sys
 import threading
 from os import walk
@@ -17,9 +18,6 @@ ADDR = (SERVER, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!DISCONNECT"
 DATASET = './server/dataset'
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(ADDR)
 
 files = []
 
@@ -91,19 +89,24 @@ def handle_client(conn, addr):
             
     conn.close()
 
+class MyTCPHandler(socketserver.BaseRequestHandler):
+    def handle(self):
+        print(f"[LISTENING] Server is listening on {SERVER}")
+        while True:
+            handle_client(self.request,self.client_address)
+
+class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    pass
+
 def start():
-    server.listen()
-    print(f"[LISTENING] Server is listening on {SERVER}")
-    while True:
-        conn, addr = server.accept()
-        handle_client(conn,addr)
+    # server.listen()
+    server = ThreadedTCPServer(ADDR, MyTCPHandler)
+    with server:
+        server.serve_forever()
+    
         # thread = threading.Thread(target=handle_client, args=(conn, addr))
         # thread.start()
-        # print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
+        print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
         
-
-
-
-
 print("[STARTING] server is starting ...")
 start()
