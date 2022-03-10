@@ -10,7 +10,7 @@ HEADER_SIZE = 256
 BUFFER_SIZE = 1024 
 FORMAT = 'utf-8'
 
-server_address = ('192.168.1.21', 5000)
+server_address = ('192.168.18.23', 5000)
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect(server_address)
 

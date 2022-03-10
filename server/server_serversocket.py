@@ -71,7 +71,7 @@ def send_file(conn, addr, file):
     
 
 def handle_client(conn, addr):
-    print(f"[NEW CONNECTION] {addr} connected.")
+    # print(f"[NEW CONNECTION] {addr} connected.")
     send(conn, addr, f"{listFiles()}Select file you want to download with command 'unduh nama_file'")
     connected = True
     while connected:
@@ -100,6 +100,7 @@ class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 
 def start():
     # server.listen()
+    print(f"[NEW CONNECTION] {ADDR} connected.")
     server = ThreadedTCPServer(ADDR, MyTCPHandler)
     with server:
         server.serve_forever()
